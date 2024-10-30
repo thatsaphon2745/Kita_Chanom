@@ -1,0 +1,91 @@
+/* MenuPage.css */
+
+.menu-page {
+  background-color: #ffffff;
+}
+
+.menu-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: #ECECEC;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  width: 50px;
+  margin-right: 10px;
+}
+
+.menu-title {
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 20px 0;
+  color: #333;
+}
+
+.menu-grid {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.menu-item {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 10px;
+}
+
+.menu-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.menu-info {
+  margin-top: 10px;
+}
+
+.menu-name {
+  font-size: 16px;
+  color: #333;
+}
+
+.menu-price {
+  font-size: 14px;
+  color: #888;
+}
+
+.add-button {
+  margin-top: 10px;
+  font-size: 20px;
+  background-color: #28a745;
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-button:hover {
+  background-color: #218838;
+}
+
+.menu {
+  background-color: #f9f9f9;
+}
+
+  
