@@ -1,28 +1,23 @@
-import './App.css';
+// src/App.js
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import StartPage from "./client/StartPage";
+import MenuPage from "./client/MenuPage";
+import CustomPage from "./client/CustomPage";
+import CartPage  from "./client/CartPage";
+import QrcodePage from "./client/QrcodePage";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src="Octocat.png" className="App-logo" alt="logo" />
-        <p>
-          GitHub Codespaces <span className="heart">♥️</span> React
-        </p>
-        <p className="small">
-          Edit <code>src/App.jsx</code> and save to reload.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </p>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<StartPage />} />
+        <Route path="/menu" element={<MenuPage />} />
+        <Route path="/custom" element={<CustomPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/qrcode" element={<QrcodePage />} />
+      </Routes>
+    </Router>
   );
 }
 

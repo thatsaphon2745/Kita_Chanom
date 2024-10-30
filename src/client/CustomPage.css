@@ -1,0 +1,55 @@
+.custom-page {
+    padding: 20px;
+    max-width: 400px;
+    margin: auto;
+  }
+  
+  .back-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .drink-image {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .drink-info {
+    text-align: center;
+    margin: 10px 0;
+  }
+  
+  .custom-section {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f2f2f2;
+    border-radius: 8px;
+  }
+  
+  .custom-section h3 {
+    margin-bottom: 10px;
+  }
+  
+  label {
+    display: block;
+    margin: 5px 0;
+    font-size: 18px;
+  }
+  
+  .add-cart-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #00c853;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .add-cart-button:hover {
+    background-color: #009624;
+  }
+  
