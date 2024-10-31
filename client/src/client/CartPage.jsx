@@ -30,13 +30,9 @@ function CartPage() {
   };
 
   const handleOrder = () => {
-    console.log("Order placed:", cartItems);
-    alert("Order has been placed!");
+    // Navigate to QrcodePage with totalPrice as state
+    navigate("/qrcode", { state: { totalPrice } });
   };
-
-  if (cartItems.length === 0) {
-    return <div className="empty-cart">Your cart is empty.</div>;
-  }
 
   return (
     <div className="cart-page">
@@ -45,37 +41,41 @@ function CartPage() {
       </button>
 
       <div className="cart-list">
-        {cartItems.map((item, index) => (
-          <div key={index} className="cart-item">
-            <img src={item.image} alt={item.name} className="cart-item-image" />
-            <div className="cart-item-info">
-              <h3 className="item-name">{item.name}</h3>
-              <p className="item-price">{item.price} บาท</p>
-              <p className="item-detail">หวาน {item.sweetness}</p>
-              <p className="item-detail">{item.pearl}</p>
-            </div>
-
-            <div className="cart-item-actions">
-              <div className="quantity-controls">
-                <button onClick={() => handleQuantityChange(index, -1)}>-</button>
-                <span>{item.quantity}</span>
-                <button onClick={() => handleQuantityChange(index, 1)}>+</button>
+        {cartItems.length === 0 ? (
+          <div className="empty-cart">Your cart is empty.</div>
+        ) : (
+          cartItems.map((item, index) => (
+            <div key={index} className="cart-item">
+              <img src={item.image} alt={item.name} className="cart-item-image" />
+              <div className="cart-item-info">
+                <h3 className="item-name">{item.name}</h3>
+                <p className="item-price">{item.price} บาท</p>
+                <p className="item-detail">หวาน {item.sweetness}</p>
+                <p className="item-detail">{item.pearl}</p>
               </div>
 
-              <button
-                className="remove-button"
-                onClick={() => handleRemoveItem(index)}
-              >
-                ลบรายการ
-              </button>
+              <div className="cart-item-actions">
+                <div className="quantity-controls">
+                  <button onClick={() => handleQuantityChange(index, -1)}>-</button>
+                  <span>{item.quantity}</span>
+                  <button onClick={() => handleQuantityChange(index, 1)}>+</button>
+                </div>
+
+                <button
+                  className="remove-button"
+                  onClick={() => handleRemoveItem(index)}
+                >
+                  ลบรายการ
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       <div className="cart-footer">
         <div className="total-price">ยอดชำระ: {totalPrice} บาท</div>
-        <button className="order-button" onClick={handleOrder}>
+        <button className="order-button" onClick={handleOrder} disabled={cartItems.length === 0}>
           สั่งรายการ
         </button>
       </div>
@@ -84,4 +84,3 @@ function CartPage() {
 }
 
 export default CartPage;
-

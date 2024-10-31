@@ -1,55 +1,100 @@
+/* Full-page layout */
 .custom-page {
-    padding: 20px;
-    max-width: 400px;
-    margin: auto;
-  }
-  
-  .back-button {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-  }
-  
-  .drink-image {
-    width: 100%;
-    border-radius: 10px;
-  }
-  
-  .drink-info {
-    text-align: center;
-    margin: 10px 0;
-  }
-  
-  .custom-section {
-    margin: 20px 0;
-    padding: 10px;
-    background-color: #f2f2f2;
-    border-radius: 8px;
-  }
-  
-  .custom-section h3 {
-    margin-bottom: 10px;
-  }
-  
-  label {
-    display: block;
-    margin: 5px 0;
-    font-size: 18px;
-  }
-  
-  .add-cart-button {
-    width: 100%;
-    padding: 15px;
-    background-color: #00c853;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 18px;
-    cursor: pointer;
-  }
-  
-  .add-cart-button:hover {
-    background-color: #009624;
-  }
-  
+  padding: 20px;
+  max-width: 100%; /* Remove fixed width */
+  height: 100vh; /* Full viewport height */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  color: #333;
+  overflow-y: auto; /* Allow scrolling if content is too long */
+  background-color: #ECECEC;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #333;
+  align-self: flex-start;
+  margin-bottom: 10px;
+}
+
+.drink-image {
+  width: 70%; /* Larger to fill more of the screen */
+  max-width: 300px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 10px;
+  object-fit: cover;
+  background-color: #ffffff;
+}
+
+.drink-info {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.drink-info h2 {
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.drink-info p {
+  font-size: 18px;
+  color: #666;
+}
+
+.custom-section {
+  width: 100%; /* Full width */
+  margin: 15px 0;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.custom-section h3 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #333;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+label input[type="radio"] {
+  margin-right: 10px;
+  accent-color: #00c853;
+}
+
+.add-cart-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #00c853;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.add-cart-button:hover {
+  background-color: #009624;
+}
+
+.add-cart-button:active {
+  transform: scale(0.98);
+}
