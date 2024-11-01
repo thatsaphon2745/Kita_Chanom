@@ -4,6 +4,8 @@ const mysql = require('mysql');
 const cors = require('cors');
 const morgan = require('morgan')
 
+const { v4: uuidv4 } = require('uuid');
+
 app.use(cors());
 app.use(express.json());
 
@@ -26,16 +28,43 @@ db.connect((err) => {
 });
 
 
-//cart
-app.get('/cart', (req,res) => {
-    db.query("SELECT * FROM cart", (err,result) =>{
-        if (err){
-            console.log.apply(err);
-        } else{
-            res.send(result);
+//customers
+app.post("/customers/add", (req, res) => {
+    const { customer_name } = req.body;
+
+    // คำสั่ง SQL ที่จะเพิ่ม customer พร้อมกับค่า UUID และ timestamp
+    const sqlInsert = `
+        INSERT INTO customers (customer_id, customer_name, created_at)
+        VALUES (UUID(), ?, NOW())
+    `;
+    
+    db.query(sqlInsert, [customer_name], (err, result) => {
+        if (err) {
+            console.error("Error inserting customer:", err);
+            res.status(500).send("Error inserting customer");
+        } else {
+            res.status(200).send("Customer added successfully");
         }
-    })
-})
+    });
+});
+
+
+//cart
+app.get("/cart", (req, res) => {
+    const customerId = req.query.customer_id; // ดึง customer_id จาก query parameters
+    const customerName = req.query.customer_name; // ดึง customer_name จาก query parameters
+
+    // ปรับ query ให้รองรับทั้ง customer_id และ customer_name
+    const sqlSelect = "SELECT * FROM cart WHERE customer_id = ? AND customer_name = ?";
+
+    db.query(sqlSelect, [customerId, customerName], (err, result) => {
+        if (err) {
+            console.error("Error fetching cart data:", err);
+            return res.status(500).send("Error fetching cart data");
+        }
+        res.send(result);
+    });
+});
 
 app.put('/cart/update-quantity', (req, res) => {
     const { id, quantity } = req.body; // รับ id และ quantity ใหม่จาก body ของ request
@@ -90,7 +119,7 @@ app.delete('/cart/remove/:id', (req, res) => {
 //custom
 // เพิ่มข้อมูลใหม่ใน cart โดยเช็ค id สูงสุดและเพิ่ม 1
 app.post("/cart/add", (req, res) => {
-    const { customer_name, menu_name, price, quantity, photo, sweetness, topping, pearl, total_price} = req.body;
+    const { customer_id, customer_name, menu_name, price, quantity, photo, sweetness, topping, pearl, total_price} = req.body;
   
     // Step 1: ดึง id สูงสุดจาก cart
     const getMaxIdQuery = "SELECT MAX(id) AS maxId FROM cart";
@@ -106,10 +135,10 @@ app.post("/cart/add", (req, res) => {
   
       // Step 3: เพิ่มข้อมูลใหม่พร้อมกับ id ที่เพิ่มขึ้น
       const sqlInsert = `
-        INSERT INTO cart (id, customer_name, menu_name, price, quantity, photo, sweetness, topping, pearl, total_price)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO cart (customer_id, id, customer_name, menu_name, price, quantity, photo, sweetness, topping, pearl, total_price)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
-      db.query(sqlInsert, [newId, customer_name, menu_name, price, quantity, photo, sweetness, topping, pearl, total_price], (error, result) => {
+      db.query(sqlInsert, [customer_id, newId, customer_name, menu_name, price, quantity, photo, sweetness, topping, pearl, total_price], (error, result) => {
         if (error) {
           console.error("Error inserting item:", error);
           return res.status(500).send("Error adding item to cart");
@@ -119,13 +148,6 @@ app.post("/cart/add", (req, res) => {
     });
   });
   
-
-
-// app.post('/api', (req,res) =>{
-//     const { username , password } = req.body
-//     console.log(username,password)
-//     res.send('Jukkru555+')
-// })
 
 app.listen('3001', () => {
     console.log('Server is running on port 3001')

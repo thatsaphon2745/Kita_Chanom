@@ -16,9 +16,12 @@ function CustomPage() {
 
   // ดึงค่า name จาก global state
   const name = useSelector((state) => state.name);
+  const customerId = useSelector((state) => state.customerId); // ดึง customer_id จาก global state
+  
   console.log(name);
   console.log(item);
   console.log(isEdit);
+  console.log(customerId)
   const checkTotalPrice = () => {
     const toppings = [
       { name: "วุ้นสตรอเบอร์รี่", price: 5 },
@@ -55,6 +58,7 @@ function CustomPage() {
   const handleAddToCart = () => {
     const total_price = checkTotalPrice(); // เรียกใช้ฟังก์ชันที่คำนวณ total_price
     const customizedOrder = {
+      customer_id: customerId, // เพิ่ม customer_id ที่มาจาก global state
       customer_name: name, // เพิ่ม customer_name ที่มาจาก global state
       menu_name: item.name,
       price: parseFloat(item.price), // แปลงราคาเป็น number
