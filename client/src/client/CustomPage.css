@@ -98,3 +98,8 @@ label input[type="radio"] {
 .add-cart-button:active {
   transform: scale(0.98);
 }
+.option-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 8px;
+}
