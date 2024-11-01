@@ -99,6 +99,10 @@
     cursor: pointer;
   }
   
+  .remove-button:hover {
+    background-color: #ff7875;
+  }
+
   .cart-footer {
     width: 100%;
     max-width: 400px;
@@ -122,5 +126,19 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+  }
+  
+  .edit-button {
+    margin-top: 10px;
+    background-color: #f0f0f0;
+    color: #201A25;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .edit-button:hover {
+    background-color: #ddd; /* เปลี่ยนสีเมื่อวางเมาส์ */
   }
   

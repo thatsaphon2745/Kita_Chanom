@@ -1,37 +1,82 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./CartPage.css";
+import Axios from "axios";
 
 function CartPage() {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  // Initialize cartItems from state or empty list
-  const [cartItems, setCartItems] = useState(() => {
-    const existingOrders = state?.existingOrders || [];
-    return state?.newOrder ? [...existingOrders, state.newOrder] : existingOrders;
-  });
+  const [cartList, setCartList] = useState([]);
+
+  const getCart = () => {
+    Axios.get("http://localhost:3001/cart")
+      .then((response) => {
+        setCartList(response.data);
+        console.log(cartList);
+      })
+      .catch((error) => {
+        console.error("Error fetching cart data:", error);
+      });
+  };
+
+  useEffect(() => {
+    getCart();
+  }, []);
 
   // Calculate the total price
-  const totalPrice = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
+  const totalCart = cartList.reduce(
+    (acc, item) => acc + item.total_price * item.quantity,
     0
   );
 
   const handleQuantityChange = (index, change) => {
-    const updatedCart = [...cartItems];
-    updatedCart[index].quantity = Math.max(1, updatedCart[index].quantity + change);
-    setCartItems(updatedCart);
+    const updatedCart = [...cartList];
+    const item = updatedCart[index];
+    const newQuantity = Math.max(1, item.quantity + change);
+
+    // Update quantity in app state
+    updatedCart[index].quantity = newQuantity;
+    setCartList(updatedCart);
+
+    // Update quantity in database
+    Axios.put("http://localhost:3001/cart/update-quantity", {
+      id: item.id,
+      quantity: newQuantity,
+    })
+      .then(() => {
+        console.log("Quantity updated in database");
+      })
+      .catch((error) => {
+        console.error("Error updating quantity:", error);
+      });
   };
 
   const handleRemoveItem = (index) => {
-    const updatedCart = cartItems.filter((_, i) => i !== index);
-    setCartItems(updatedCart);
+    const itemToRemove = cartList[index];
+
+    // API call to remove item from database
+    Axios.delete(`http://localhost:3001/cart/remove/${itemToRemove.id}`)
+      .then(() => {
+        console.log("Item removed from database");
+
+        // Update state to remove item from cartList
+        const updatedCart = cartList.filter((_, i) => i !== index);
+        setCartList(updatedCart);
+      })
+      .catch((error) => {
+        console.error("Error removing item from database:", error);
+      });
   };
 
   const handleOrder = () => {
     // Navigate to QrcodePage with totalPrice as state
-    navigate("/qrcode", { state: { totalPrice } });
+    navigate("/qrcode", { state: { totalCart } });
+  };
+
+  const handleEditItem = (item) => {
+    // นำทางไปที่ CustomPage พร้อมข้อมูลที่ต้องการแก้ไข
+    navigate("/custom", { state: { item, isEdit: true } });
   };
 
   return (
@@ -41,25 +86,42 @@ function CartPage() {
       </button>
 
       <div className="cart-list">
-        {cartItems.length === 0 ? (
+        {cartList.length === 0 ? (
           <div className="empty-cart">Your cart is empty.</div>
         ) : (
-          cartItems.map((item, index) => (
+          cartList.map((item, index) => (
             <div key={index} className="cart-item">
-              <img src={item.image} alt={item.name} className="cart-item-image" />
+              <img
+                src={item.photo}
+                alt={item.menu_name}
+                className="cart-item-image"
+              />
               <div className="cart-item-info">
-                <h3 className="item-name">{item.name}</h3>
-                <p className="item-price">{item.price} บาท</p>
+                <h3 className="item-name">{item.menu_name}</h3>
+                <p className="item-price">{item.total_price} บาท</p>
                 <p className="item-detail">หวาน {item.sweetness}</p>
                 <p className="item-detail">{item.pearl}</p>
+                <p className="item-detail">{item.topping}</p>
               </div>
 
               <div className="cart-item-actions">
                 <div className="quantity-controls">
-                  <button onClick={() => handleQuantityChange(index, -1)}>-</button>
+                  <button onClick={() => handleQuantityChange(index, -1)}>
+                    -
+                  </button>
                   <span>{item.quantity}</span>
-                  <button onClick={() => handleQuantityChange(index, 1)}>+</button>
+                  <button onClick={() => handleQuantityChange(index, 1)}>
+                    +
+                  </button>
                 </div>
+
+                {/* New Edit Details button */}
+                <button
+                  className="edit-button"
+                  onClick={() => handleEditItem(item)}
+                >
+                  แก้ไขรายละเอียด
+                </button>
 
                 <button
                   className="remove-button"
@@ -74,8 +136,12 @@ function CartPage() {
       </div>
 
       <div className="cart-footer">
-        <div className="total-price">ยอดชำระ: {totalPrice} บาท</div>
-        <button className="order-button" onClick={handleOrder} disabled={cartItems.length === 0}>
+        <div className="total-price">ยอดชำระ: {totalCart} บาท</div>
+        <button
+          className="order-button"
+          onClick={handleOrder}
+          disabled={cartList.length === 0}
+        >
           สั่งรายการ
         </button>
       </div>
@@ -84,3 +150,5 @@ function CartPage() {
 }
 
 export default CartPage;
+
+

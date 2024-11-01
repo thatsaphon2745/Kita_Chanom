@@ -6,7 +6,7 @@ function QrcodePage() {
   const navigate = useNavigate();
 
   // Get the total price from the state passed from CartPage
-  const totalPrice = state?.totalPrice || 0;
+  const totalCart = state?.totalCart || 0;
 
   return (
     <div className="qrcode-page">
@@ -20,7 +20,7 @@ function QrcodePage() {
       </div>
 
       <div className="payment-info">
-        <div className="total-price">ยอดชำระ: {totalPrice} บาท</div>
+        <div className="total-price">ยอดชำระ: {totalCart} บาท</div>
         <p>กรุณาชำระเงินผ่าน QR Code</p>
       </div>
     </div>

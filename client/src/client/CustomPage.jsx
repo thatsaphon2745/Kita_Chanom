@@ -1,33 +1,97 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useSelector } from "react-redux"; // นำเข้า useSelector
+import Axios from "axios"; // import Axios สำหรับการเรียก API
 import "./CustomPage.css";
 
 function CustomPage() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { item } = state || {}; // Destructure item from state
+  const { item, isEdit } = state || {}; // ดึง item และ isEdit จาก state
 
-  const [sweetness, setSweetness] = useState("50%");
-  const [topping, setTopping] = useState(null);
-  const [pearl, setPearl] = useState(null);
+  // ตั้งค่าตัวแปร state ตามค่าที่ได้รับจาก item ถ้ามี
+  const [sweetness, setSweetness] = useState(isEdit ? item.sweetness : "50%");
+  const [topping, setTopping] = useState(isEdit ? item.topping : null);
+  const [pearl, setPearl] = useState(isEdit ? item.pearl : null);
 
+  // ดึงค่า name จาก global state
+  const name = useSelector((state) => state.name);
+  console.log(name);
+  console.log(item);
+  console.log(isEdit);
+  const checkTotalPrice = () => {
+    const toppings = [
+      { name: "วุ้นสตรอเบอร์รี่", price: 5 },
+      { name: "วิปชีส", price: 10 },
+      { name: "ครีมชีส", price: 20 },
+      { name: "วุ้นคาราเมล", price: 5 },
+    ];  
+    const pearls = [
+      { name: "มุกบราวน์ชูการ์", price: 5 },
+      { name: "มุกต้นตำหรับ", price: 5 },
+      { name: "มุกอโลเวร่า", price: 10 },
+    ];
+  
+    // เริ่มจากราคาหลักของ item
+    let total_price = parseFloat(item.price); // แปลงราคาเมนูเป็น number
+  
+    // คำนวณราคาของ pearl ที่เลือก
+    pearls.forEach(pearlOption => {
+      if (pearlOption.name === pearl) {
+        total_price += pearlOption.price; // เพิ่มราคา pearl
+      }
+    });
+  
+    // คำนวณราคาของ topping ที่เลือก
+    toppings.forEach(toppingOption => {
+      if (toppingOption.name === topping) {
+        total_price += toppingOption.price; // เพิ่มราคา topping
+      }
+    });
+  
+    return total_price; // คืนค่ารวมทั้งหมด
+  };
+  
   const handleAddToCart = () => {
+    const total_price = checkTotalPrice(); // เรียกใช้ฟังก์ชันที่คำนวณ total_price
     const customizedOrder = {
-      ...item,
+      customer_name: name, // เพิ่ม customer_name ที่มาจาก global state
+      menu_name: item.name,
+      price: parseFloat(item.price), // แปลงราคาเป็น number
+      quantity: 1, // ตั้งค่า quantity เริ่มต้น
+      photo: item.photo,
       sweetness,
-      topping,
       pearl,
-      quantity: 1, // Default quantity
+      topping,
+      total_price: total_price.toFixed(2) // แปลง total_price เป็น string ที่มีทศนิยม 2 ตำแหน่ง
     };
   
-    console.log("Order added:", customizedOrder);
+    console.log(`Topping: ${topping}, Pearl: ${pearl}, Total Price: ${customizedOrder.total_price}`);
   
-    // Navigate to the CartPage while preserving existing orders
-    navigate("/cart", {
-      state: { 
-        newOrder: customizedOrder 
-      },
-    });
+    if (isEdit) {
+      // หากอยู่ในโหมดแก้ไข ให้เรียก API สำหรับการอัปเดต
+      Axios.put(`http://localhost:3001/cart/update/${item.id}`, customizedOrder)
+        .then((response) => {
+          console.log(response.data);
+          // นำทางไปที่ CartPage พร้อมกับการอัปเดตตะกร้า
+          navigate("/cart", { state: { updatedOrder: customizedOrder } });
+        })
+        .catch((error) => {
+          console.error("Error updating item in cart:", error);
+        });
+    } else {
+      // หากเป็นการเพิ่มใหม่ ให้เรียก API สำหรับการเพิ่ม
+      Axios.post("http://localhost:3001/cart/add", customizedOrder)
+        .then((response) => {
+          console.log(response.data);
+          console.log(customizedOrder);
+          // นำทางไปที่ CartPage พร้อมกับการอัปเดตตะกร้า
+          navigate("/cart", { state: { updatedOrder: customizedOrder } });
+        })
+        .catch((error) => {
+          console.error("Error adding item to cart:", error);
+        });
+    }
   };
   
 
@@ -38,7 +102,7 @@ function CustomPage() {
       <button className="back-button" onClick={() => navigate(-1)}>
         ←
       </button>
-      <img src={item.image} alt={item.name} className="drink-image" />
+      <img src={item.photo} alt={item.name} className="drink-image" />
 
       <div className="drink-info">
         <h2>{item.name}</h2>
@@ -64,9 +128,9 @@ function CustomPage() {
       <div className="custom-section">
         <h3>เลือกไข่มุก</h3>
         {[
-          { name: "มุกบลาวซูก้า", price: 5 },
+          { name: "มุกบราวน์ชูการ์", price: 5 },
           { name: "มุกต้นตำหรับ", price: 5 },
-          { name: "อโลเวร่า", price: 10 },
+          { name: "มุกอโลเวร่า", price: 10 },
         ].map((option) => (
           <label key={option.name}>
             <input
@@ -85,7 +149,7 @@ function CustomPage() {
         <h3>เลือก Topping</h3>
         {[
           { name: "วุ้นสตรอเบอร์รี่", price: 5 },
-          { name: "วิปซีก", price: 10 },
+          { name: "วิปชีส", price: 10 },
           { name: "ครีมชีส", price: 20 },
           { name: "วุ้นคาราเมล", price: 5 },
         ].map((option) => (
@@ -103,7 +167,7 @@ function CustomPage() {
       </div>
 
       <button className="add-cart-button" onClick={handleAddToCart}>
-        ADD CART
+        {isEdit ? "UPDATE CART" : "ADD CART"}
       </button>
     </div>
   );
