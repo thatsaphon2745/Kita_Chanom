@@ -132,11 +132,12 @@ function CustomPage() {
       <div className="custom-section">
         <h3>เลือกไข่มุก</h3>
         {[
-          { name: "มุกบราวน์ชูการ์", price: 5 },
-          { name: "มุกต้นตำหรับ", price: 5 },
-          { name: "มุกอโลเวร่า", price: 10 },
+          { name: "มุกบราวน์ชูการ์", price: 5 ,image: "/src/photo/pearl/image1.png"},
+          { name: "มุกต้นตำหรับ", price: 5 ,image: "/src/photo/pearl/image2.png"},
+          { name: "มุกอโลเวร่า", price: 10 ,image: "/src/photo/pearl/image3.png"},
         ].map((option) => (
           <label key={option.name}>
+            
             <input
               type="radio"
               name="pearl"
@@ -144,6 +145,7 @@ function CustomPage() {
               checked={pearl === option.name}
               onChange={() => setPearl(option.name)}
             />
+            <img src={option.image} alt={option.name} className="option-image"/>
             {option.name} +{option.price}
           </label>
         ))}
@@ -152,10 +154,10 @@ function CustomPage() {
       <div className="custom-section">
         <h3>เลือก Topping</h3>
         {[
-          { name: "วุ้นสตรอเบอร์รี่", price: 5 },
-          { name: "วิปชีส", price: 10 },
-          { name: "ครีมชีส", price: 20 },
-          { name: "วุ้นคาราเมล", price: 5 },
+          { name: "วุ้นสตรอเบอร์รี่", price: 5 ,image : '/src/photo/topping/image1.png'},
+          { name: "วิปชีส", price: 10 ,image : '/src/photo/topping/image2.png'},
+          { name: "ครีมชีส", price: 20 ,image : '/src/photo/topping/image3.png'},
+          { name: "วุ้นคาราเมล", price: 5 ,image : '/src/photo/topping/image4.png'},
         ].map((option) => (
           <label key={option.name}>
             <input
@@ -165,6 +167,7 @@ function CustomPage() {
               checked={topping === option.name}
               onChange={() => setTopping(option.name)}
             />
+            <img src={option.image} alt={option.name} className="option-image"/>
             {option.name} +{option.price}
           </label>
         ))}
