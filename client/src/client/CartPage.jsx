@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux"; // นำเข้า useSelector
 import "./CartPage.css";
 import Axios from "axios";
 
@@ -8,21 +9,25 @@ function CartPage() {
   const navigate = useNavigate();
 
   const [cartList, setCartList] = useState([]);
-
+  const name = useSelector((state) => state.name);
+  const customerId = useSelector((state) => state.customerId); // ดึง customerId จาก Redux state
   const getCart = () => {
-    Axios.get("http://localhost:3001/cart")
+
+    // เรียก API โดยส่ง customer_id และ customer_name
+    Axios.get(`http://localhost:3001/cart?customer_id=${customerId}&customer_name=${name}`)
       .then((response) => {
         setCartList(response.data);
-        console.log(cartList);
+        console.log(response.data); // แสดงข้อมูลที่ได้รับจาก API
       })
       .catch((error) => {
         console.error("Error fetching cart data:", error);
       });
-  };
+};
 
-  useEffect(() => {
+useEffect(() => {
     getCart();
-  }, []);
+}, [name, customerId]); // เพิ่ม dependencies เพื่อให้ useEffect ทำงานใหม่เมื่อ name หรือ customerId เปลี่ยน
+
 
   // Calculate the total price
   const totalCart = cartList.reduce(
@@ -81,7 +86,7 @@ function CartPage() {
 
   return (
     <div className="cart-page">
-      <button className="back-button" onClick={() => navigate(-1)}>
+      <button className="back-button" onClick={() => navigate("/menu")}>
         ←
       </button>
 

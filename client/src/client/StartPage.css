@@ -1,9 +1,11 @@
+/* StartPage.css */
+
 .start-page {
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    background-color: #ECECEC; /* สีพื้นหลังของทั้งหน้า */
+    background-color: #ECECEC;
     font-family: Arial, sans-serif;
 }
 
@@ -40,8 +42,7 @@
     align-items: center;
     width: 100%;
     padding: 20px;
-    background-color: #ECECEC; /* เปลี่ยนให้เป็นสีเดียวกับพื้นหลังของ start-page */
-    box-shadow: 0 -8px 10px rgba(97, 95, 95, 0.5); /*เงาที่ด้านบน*/
+    background-color: #ECECEC;
 }
 
 .input-name {
@@ -49,7 +50,7 @@
     padding: 12px;
     margin: 10px 0;
     font-size: 16px;
-    border: 1px solid #000; /* ขอบสีดำสำหรับช่องข้อความ */
+    border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #fff;
     text-align: center;
@@ -98,7 +99,7 @@
 .order-button span {
     font-size: 18px;
     font-weight: bold;
-    color: #333; /* รักษาสีข้อความให้เป็นสีดำ */
+    color: #333;
 }
 
 .footer {
@@ -108,5 +109,5 @@
     font-size: 14px;
     color: #333;
     width: 100%;
-    background-color: #ECECEC; /* สีพื้นหลังของฟุตเตอร์ */
+    background-color: #ECECEC;
 }

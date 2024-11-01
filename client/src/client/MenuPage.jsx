@@ -2,19 +2,23 @@ import React, { useEffect, useState } from "react"; // นำเข้า useEff
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart } from "../cartSlice"; // นำเข้า setCart
+import { setName } from "../nameSlice"; // นำเข้า setName action จาก nameSlice
 import Axios from "axios"; // นำเข้า Axios
 import "./MenuPage.css";
 
 function MenuPage() {
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // ใช้ dispatch
-  const cart = useSelector((state) => state.cart); // ดึงข้อมูลจาก cart state
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart);
+  const name = useSelector((state) => state.name);
+  const customerId = useSelector((state) => state.customerId); // ดึง customerId
 
   const getCart = () => {
-    Axios.get("http://localhost:3001/cart")
+    Axios.get(
+      `http://localhost:3001/cart?customer_name=${name}&customer_id=${customerId}`
+    ) // ส่ง customer_id ด้วย
       .then((response) => {
-        dispatch(setCart(response.data)); // ตั้งค่า cart ใน Redux
-        console.log(response.data); // แสดงข้อมูลที่ดึงมา
+        dispatch(setCart(response.data)); // อัปเดต global state
       })
       .catch((error) => {
         console.error("Error fetching cart data:", error);
@@ -23,7 +27,7 @@ function MenuPage() {
 
   useEffect(() => {
     getCart(); // ดึงข้อมูลตะกร้าเมื่อคอมโพเนนต์โหลด
-  }, []);
+  }, [name, customerId]); // เพิ่ม customerId ใน dependencies
 
   const items = [
     { id: 1, name: "ชานม", price: "19.00", photo: "/src/photo/menu/ชานม.jpg" },
@@ -108,7 +112,7 @@ function MenuPage() {
   ];
 
   const handleAddToCart = (item) => {
-    navigate("/custom", { state: { item , isEdit: false } });
+    navigate("/custom", { state: { item, isEdit: false } });
   };
 
   const goToCart = () => {
