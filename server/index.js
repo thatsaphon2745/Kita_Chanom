@@ -83,15 +83,16 @@ app.put('/cart/update-quantity', (req, res) => {
 // อัปเดตข้อมูลของรายการในตะกร้า
 app.put('/cart/update/:id', (req, res) => {
     const id = req.params.id; // ดึง ID จาก URL
-    const { quantity, sweetness, topping, pearl } = req.body; // รับข้อมูลใหม่จาก body ของ request
+    const { quantity, sweetness, topping, pearl, total_price } = req.body; // รับข้อมูลใหม่จาก body ของ request
 
     // ตรวจสอบความถูกต้องของข้อมูล
     if (!id || !quantity || quantity < 1) {
         return res.status(400).send("Invalid input data");
     }
 
-    const query = "UPDATE cart SET quantity = ?, sweetness = ?, topping = ?, pearl = ? WHERE id = ?";
-    db.query(query, [quantity, sweetness, topping, pearl, id], (err, result) => {
+    // ปรับลำดับใน array ตามที่ตั้งค่าไว้ใน SQL
+    const query = "UPDATE cart SET quantity = ?, sweetness = ?, topping = ?, pearl = ?, total_price = ? WHERE id = ?";
+    db.query(query, [quantity, sweetness, topping, pearl, total_price, id], (err, result) => { // แก้ไขลำดับที่นี่
         if (err) {
             console.log("Error updating item in cart:", err);
             return res.status(500).send("Failed to update item");

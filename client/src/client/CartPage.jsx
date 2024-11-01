@@ -86,7 +86,7 @@ useEffect(() => {
 
   return (
     <div className="cart-page">
-      <button className="back-button" onClick={() => navigate(-1)}>
+      <button className="back-button" onClick={() => navigate("/menu")}>
         ←
       </button>
 

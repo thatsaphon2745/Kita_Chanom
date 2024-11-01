@@ -17,44 +17,44 @@ function CustomPage() {
   // ดึงค่า name จาก global state
   const name = useSelector((state) => state.name);
   const customerId = useSelector((state) => state.customerId); // ดึง customer_id จาก global state
-  
+
   console.log(name);
   console.log(item);
   console.log(isEdit);
-  console.log(customerId)
+  console.log(customerId);
   const checkTotalPrice = () => {
     const toppings = [
       { name: "วุ้นสตรอเบอร์รี่", price: 5 },
       { name: "วิปชีส", price: 10 },
       { name: "ครีมชีส", price: 20 },
       { name: "วุ้นคาราเมล", price: 5 },
-    ];  
+    ];
     const pearls = [
       { name: "มุกบราวน์ชูการ์", price: 5 },
       { name: "มุกต้นตำหรับ", price: 5 },
       { name: "มุกอโลเวร่า", price: 10 },
     ];
-  
+
     // เริ่มจากราคาหลักของ item
     let total_price = parseFloat(item.price); // แปลงราคาเมนูเป็น number
-  
+
     // คำนวณราคาของ pearl ที่เลือก
-    pearls.forEach(pearlOption => {
+    pearls.forEach((pearlOption) => {
       if (pearlOption.name === pearl) {
         total_price += pearlOption.price; // เพิ่มราคา pearl
       }
     });
-  
+
     // คำนวณราคาของ topping ที่เลือก
-    toppings.forEach(toppingOption => {
+    toppings.forEach((toppingOption) => {
       if (toppingOption.name === topping) {
         total_price += toppingOption.price; // เพิ่มราคา topping
       }
     });
-  
+
     return total_price; // คืนค่ารวมทั้งหมด
   };
-  
+
   const handleAddToCart = () => {
     const total_price = checkTotalPrice(); // เรียกใช้ฟังก์ชันที่คำนวณ total_price
     const customizedOrder = {
@@ -67,12 +67,18 @@ function CustomPage() {
       sweetness,
       pearl,
       topping,
-      total_price: total_price.toFixed(2) // แปลง total_price เป็น string ที่มีทศนิยม 2 ตำแหน่ง
+      total_price: total_price.toFixed(2), // แปลง total_price เป็น string ที่มีทศนิยม 2 ตำแหน่ง
     };
-  
-    console.log(`Topping: ${topping}, Pearl: ${pearl}, Total Price: ${customizedOrder.total_price}`);
-  
+
+    console.log(
+      `Topping: ${topping}, Pearl: ${pearl}, Total Price: ${customizedOrder.total_price}`
+    );
+
     if (isEdit) {
+      // อัปเดต total_price ใหม่ในกรณีที่เป็นโหมดแก้ไข
+      const updatedTotalPrice = checkTotalPrice();
+      customizedOrder.total_price = updatedTotalPrice.toFixed(2); // อัปเดต total_price
+
       // หากอยู่ในโหมดแก้ไข ให้เรียก API สำหรับการอัปเดต
       Axios.put(`http://localhost:3001/cart/update/${item.id}`, customizedOrder)
         .then((response) => {
@@ -97,7 +103,6 @@ function CustomPage() {
         });
     }
   };
-  
 
   if (!item) return <div>Item not found</div>; // Fallback if no item data is passed
 
@@ -132,12 +137,23 @@ function CustomPage() {
       <div className="custom-section">
         <h3>เลือกไข่มุก</h3>
         {[
-          { name: "มุกบราวน์ชูการ์", price: 5 ,image: "/src/photo/pearl/image1.png"},
-          { name: "มุกต้นตำหรับ", price: 5 ,image: "/src/photo/pearl/image2.png"},
-          { name: "มุกอโลเวร่า", price: 10 ,image: "/src/photo/pearl/image3.png"},
+          {
+            name: "มุกบราวน์ชูการ์",
+            price: 5,
+            image: "/src/photo/pearl/image1.png",
+          },
+          {
+            name: "มุกต้นตำหรับ",
+            price: 5,
+            image: "/src/photo/pearl/image2.png",
+          },
+          {
+            name: "มุกอโลเวร่า",
+            price: 10,
+            image: "/src/photo/pearl/image3.png",
+          },
         ].map((option) => (
           <label key={option.name}>
-            
             <input
               type="radio"
               name="pearl"
@@ -145,7 +161,11 @@ function CustomPage() {
               checked={pearl === option.name}
               onChange={() => setPearl(option.name)}
             />
-            <img src={option.image} alt={option.name} className="option-image"/>
+            <img
+              src={option.image}
+              alt={option.name}
+              className="option-image"
+            />
             {option.name} +{option.price}
           </label>
         ))}
@@ -154,10 +174,22 @@ function CustomPage() {
       <div className="custom-section">
         <h3>เลือก Topping</h3>
         {[
-          { name: "วุ้นสตรอเบอร์รี่", price: 5 ,image : '/src/photo/topping/image1.png'},
-          { name: "วิปชีส", price: 10 ,image : '/src/photo/topping/image2.png'},
-          { name: "ครีมชีส", price: 20 ,image : '/src/photo/topping/image3.png'},
-          { name: "วุ้นคาราเมล", price: 5 ,image : '/src/photo/topping/image4.png'},
+          {
+            name: "วุ้นสตรอเบอร์รี่",
+            price: 5,
+            image: "/src/photo/topping/image1.png",
+          },
+          { name: "วิปชีส", price: 10, image: "/src/photo/topping/image2.png" },
+          {
+            name: "ครีมชีส",
+            price: 20,
+            image: "/src/photo/topping/image3.png",
+          },
+          {
+            name: "วุ้นคาราเมล",
+            price: 5,
+            image: "/src/photo/topping/image4.png",
+          },
         ].map((option) => (
           <label key={option.name}>
             <input
@@ -167,7 +199,11 @@ function CustomPage() {
               checked={topping === option.name}
               onChange={() => setTopping(option.name)}
             />
-            <img src={option.image} alt={option.name} className="option-image"/>
+            <img
+              src={option.image}
+              alt={option.name}
+              className="option-image"
+            />
             {option.name} +{option.price}
           </label>
         ))}
