@@ -54,7 +54,7 @@ export default function StartPage() {
                     onChange={handleNameChange} // อัปเดต state เมื่อพิมพ์ชื่อ
                 />
                 
-                <div className="order_button" onClick={() => navigate("/menu")}>
+                <div className="order-button" onClick={handleOrderStart}>
                     <img src="/src/photo/menu-icon.png" alt="สั่งอาหาร" className="order-image" /><br />
                     <span>สั่งอาหาร</span>
                 </div>

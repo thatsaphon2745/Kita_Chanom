@@ -1,9 +1,11 @@
+/* StartPage.css */
+
 .start-page {
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    background-color: #ECECEC; /* สีพื้นหลังของทั้งหน้า */
+    background-color: #ECECEC;
     font-family: Arial, sans-serif;
 }
 
@@ -40,8 +42,7 @@
     align-items: center;
     width: 100%;
     padding: 20px;
-    background-color: #ECECEC; /* เปลี่ยนให้เป็นสีเดียวกับพื้นหลังของ start-page */
-    box-shadow: 0 -8px 10px rgba(97, 95, 95, 0.5); /*เงาที่ด้านบน*/
+    background-color: #ECECEC;
 }
 
 .input-name {
@@ -49,38 +50,27 @@
     padding: 12px;
     margin: 20px 0;
     font-size: 16px;
-    border: 1px solid #000; /* ขอบสีดำสำหรับช่องข้อความ */
+    border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #fff;
     text-align: center;
-    transition: background-color 0.5s, border-color 0.5s; /* เปลี่ยนแค่สีพื้นหลังและสีของขอบ */
 }
 
-.input-name:focus {
-    background-color: #f0f8ff; /* เปลี่ยนสีพื้นหลังเมื่อโฟกัส */
-    border-color: #000; /* เปลี่ยนสีของขอบเมื่อโฟกัส */
-    outline: none; /* ลบเอาท์ไลน์ที่มาตรฐาน */
-}
-
-.order_button {
-    margin-top: 50px;
+.order-button {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 15px;
-    background-color: #ddd; /* สีเทาอ่อน */
-    border: 1px solid #000; /* ขอบสีดำสำหรับปุ่ม */
+    background-color: #ffffff;
     border-radius: 8px;
     cursor: pointer;
     width: 150px;
     text-align: center;
-    transition: background-color 0.3s, transform 0.5s; /* เพิ่มเอฟเฟกต์การเปลี่ยนสีและการขยาย */
 }
 
-.order_button:hover {
-    background-color: #bbb; /* สีเทาเข้มขึ้นเมื่อโฮเวอร์ */
-    transform: scale(1.05); /* ขยายปุ่มขึ้น 5% เมื่อโฮเวอร์ */
+.order-button:hover {
+    background-color: #ddd;
 }
 
 .order-image {
@@ -92,7 +82,7 @@
 .order-button span {
     font-size: 18px;
     font-weight: bold;
-    color: #333; /* รักษาสีข้อความให้เป็นสีดำ */
+    color: #333;
 }
 
 .footer {
@@ -102,5 +92,5 @@
     font-size: 14px;
     color: #333;
     width: 100%;
-    background-color: #ECECEC; /* สีพื้นหลังของฟุตเตอร์ */
+    background-color: #ECECEC;
 }
