@@ -4,7 +4,7 @@ const mysql = require('mysql');
 const cors = require('cors');
 const morgan = require('morgan')
 
-const { v4: uuidv4 } = require('uuid');
+// const { v4: uuidv4 } = require('uuid');
 
 app.use(cors());
 app.use(express.json());
